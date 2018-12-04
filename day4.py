@@ -14,6 +14,8 @@ b = []
 for line in f:
     b.append(line.rstrip())
 
+b.sort()
+
 def get_datetime(entry):
     year = int(entry.split()[0].replace("[", "").replace("-", " ").split()[0])
     month = int(entry.split()[0].replace("[", "").replace("-", " ").split()[1])
@@ -27,6 +29,14 @@ def get_datetime(entry):
 
     return [year, month, day, [hours, minutes]]
 
+current_guard = None
+
 for a in b:
     print(a.split())
-    print(get_datetime(a))
+    if len(a.split()) is 6:
+        current_guard = int(a.split()[3].replace("#", ""))
+        print(current_guard)
+
+    if current_guard is not None:
+        pass
+    #print(get_datetime(a))
