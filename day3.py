@@ -1,96 +1,84 @@
+"""
+Day 3 solution
+"""
 
 size = 1000
-
 l = [0] * size
-L = []
+
+L = [] # Will hold ids of claims made, in the respective space
+L2 = [] # Will hold how many times a the inches have been claimed
+
+# Generate "space" of size size
 for i in range(0, size):
-    L.append(l.copy())
+    L.append(l[:])
+    L2.append(l[:])
 
-# print(L)
-
-f = open("test.txt", "r")
+f = open("input/day3.txt", "r")
 
 b = []
 
+# Read contents into a list
 for line in f:
     b.append(line.rstrip())
 
-changed = []
-n_changed = []
+n_changed = [] # Will hold ids of all claims made
+changed = [] # Will hold ids of claims that have overlapped over another
 
-magic = []
+print("\nCalculating...")
 
 for a in b:
+    # The id of the claim
     me = int(a.split()[0].replace("#", ""))
+
+    # The space from the left
     left_space = int(a.split()[2].replace(",", " ").replace(":", "").split()[0])
+
+    # The space from the top
     top_space = int(a.split()[2].replace(",", " ").replace(":", "").split()[1])
+
+    # The width of the claim
     width = int(a.split()[3].replace("x", " ").split()[0])
+
+    # The height of the claim
     height = int(a.split()[3].replace("x", " ").split()[1])
 
-    print(me)
-    my_count = 0
+    my_count = 0 # How many
     my_count_tot = 0
     my_count_null = 0
     did_not_overlap = True
-    #i = -1
+
     for i in range(top_space, top_space + height):
         for j in range(left_space, left_space + width):
 
-            #if me not in changed:
-            #    changed.append(me)
-            #if L[i][j] not in changed:
-            #    changed.append(L[i][j])
+            # Sum 1 into that inch-space, meaning it has been claimed one more time
+            L2[i][j] += 1
 
-            if L[i][j] is 0:
+            if L[i][j] == 0: # If it hasn't been claimed at all
                 if me not in n_changed:
-                    n_changed.append(me)
+                    n_changed.append(me) # Add to claims made
             else:
                 if me not in changed:
-                    changed.append(me)
+                    changed.append(me) # Add to claims that overlapped over another
                 if L[i][j] not in changed:
-                    changed.append(L[i][j])
-            L[i][j] = me
+                    changed.append(L[i][j]) # Add previous claim of that space as it has been overlapped over
+            L[i][j] = me # The space [i][j] was last claimed by the current id
 
-
-    #print(L)
-
-#    for row in L:
-#        i += 1
-#        #print("i is {}".format(i))
-#        #print("top_space is {}".format(top_space))
-#        #print("height is {}".format(height))
-#        if top_space <= i <= top_space:
-#            for n in range(left_space, left_space + width):
-#                print(row)
-#                print("wow")
-#                row[n] = 1
-#        print(row)
-
-    #print('\n')
-    #print(a)
-    #print([left_space, top_space, width, height])
-
-#print(L)
-
-#for r in L:
-#    print(r)
 
 f_count = 0
-for i in range(0, len(L)):
-    for j in range(0, len(L[i])):
-        if L[i][j] > 1:
+# Count how may inch-spaces are more than 1 (aka, were overlapped)
+for i, value in enumerate(L2):
+    for j in range(0, len(L2[i])):
+        if L2[i][j] > 1:
             f_count += 1
 
 
 wow = []
+# Find the only id that has never overlapped over other
 for element in n_changed:
-    print(element)
     if element not in changed:
         wow.append(element)
-        continue
+        break
 
-print("it isssssssss")
-print(f_count)
+print("\n Solution #1 is {}".format(f_count))
 
-print("and the list iiisss")
-print(wow)
+print("\n Solution #2 is {}\n".format(wow[0]))

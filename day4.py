@@ -1,9 +1,9 @@
 """
-Day 4 resolution
+Day 4 solution
 """
 f = open("input/day4.txt", "r")
 
-# Push contents of input into array
+# Push contents of input into a list
 b = []
 for line in f:
     b.append(line.rstrip())
@@ -64,20 +64,27 @@ for a in b:
             raise Exception
 
 counts = []
+# Count and push to counts the total minutes
+# slept by each guard
 for guard in sleeps:
     a = [sleeps[guard], guard]
     counts.append(a)
 
+# Sort from least time slept to most
 counts.sort()
 
+# Get guard that has slept more total minutes
 guard_chosen = counts[len(counts) - 1][1]
 
+# Get minute that guard_chosen has most slept
 time_chosen = sleeptimes[guard_chosen].index(max(sleeptimes[guard_chosen]))
 
 solution = guard_chosen * time_chosen
 print("\n Solution #1 is {}".format(solution))
 
 max_time_guard = []
+# Push [most_time_spent_sleeping, guard_that_slept_that] into list,
+# where list index is the minute from 0 to 59
 for n in range(60):
     current_max = [0, 0]
     for guard in sleeptimes:
@@ -85,7 +92,6 @@ for n in range(60):
             current_max = [sleeptimes[guard][n], guard]
     max_time_guard.append(current_max)
 
-#print(max_time_guard)
 time_most_slept = max_time_guard.index(max(max_time_guard))
 guard_most_slept = max(max_time_guard)[1]
 
