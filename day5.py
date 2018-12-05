@@ -1,57 +1,47 @@
 """
-Day 5 solution (incomplete)
+Day 5 solution (part1 only)
 """
+import string as awesome
 
 f = open("input/day5.txt")
 
-polymer = ""
+string = ""
 for line in f:
-    polymer = line.rstrip().strip()
+    string = line.rstrip().strip()
     break
 
-#print(polymer)
-
-string = polymer
-a = string
-
-#for i, v in enumerate(a):
-#    if i == len(a) - 1:
-#        break
-#    print(i)
-#    print(" current: {}".format(v))
-#    print(" next: {}".format(a[i+1]))
-#    print()
-
-#def find_and_remove(string):
-
-#string = a[:]
-
-restart = False
-while True:
-    for index, value in enumerate(string):
-        if index == len(string) - 1:
-            print("FINAL IS")
-            print(string)
-            restart = False
+def get_length_polymer(polymer):
+    restart = False
+    while True:
+        for index, value in enumerate(polymer):
+            if index == len(polymer) - 1:
+                restart = False
+                break
+            if abs(ord(value) - ord(polymer[index + 1])) == 32:
+                #polymer = polymer[:index] + polymer[index+2:]
+                del polymer[index]
+                del polymer[index]
+                restart = True
+                break
+        if not restart:
             break
+    return len(polymer)
 
-        #print("here")
+print("it's length is")
+#print(get_length_polymer(list(string)))
 
-        if abs(ord(value) - ord(string[index + 1])) == 32:
-            #print("Hehe")
-            #print(string[:index] + string[index+2:])
-            string = string[:index] + string[index+2:]
-            restart = True
-            break
-            print()
-    if not restart:
-        break
+#exit(0)
+# Create alphabet list
+alpha_lower = list(awesome.ascii_lowercase)
+alpha_upper = list(awesome.ascii_uppercase)
 
+final_length = []
 
+for i in range(26):
+    print(" calculating for {}".format(alpha_lower[i]))
+    temp = string.replace(alpha_lower[i], "").replace(alpha_upper[i], "")
+    c = get_length_polymer(list(temp))
+    final_length.append(c)
 
-print("it is")
-print(string)
-
-print("and it's length is")
-print(len(string))
-#print(find_and_remove(a))
+for e in range(26):
+    print("{} is {}".format(alpha_lower[e], final_length[e]))
