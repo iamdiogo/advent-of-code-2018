@@ -1,5 +1,5 @@
 """
-Day 5 solution (part1 only)
+Day 5 solution (unoptimized)
 """
 import string as awesome
 
@@ -28,7 +28,7 @@ def get_length_polymer(polymer):
     return len(polymer)
 
 print("it's length is")
-#print(get_length_polymer(list(string)))
+print(get_length_polymer(list(string)))
 
 #exit(0)
 # Create alphabet list
