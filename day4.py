@@ -30,13 +30,63 @@ def get_datetime(entry):
     return [year, month, day, [hours, minutes]]
 
 current_guard = None
+last_falls = None
+
+sleeps = {}
+sleeptimes = {}
 
 for a in b:
     print(a.split())
     if len(a.split()) is 6:
         current_guard = int(a.split()[3].replace("#", ""))
+        print("\n####")
         print(current_guard)
+        print("####\n")
 
     if current_guard is not None:
-        pass
-    #print(get_datetime(a))
+        try:
+            sleeps[current_guard]
+        except:
+            sleeps[current_guard] = 0
+
+        try:
+            sleeptimes[current_guard]
+        except:
+            sleeptimes[current_guard] = [0 for i in range(60)]
+
+    if len(a.split()) is 4:
+        update = a.split()[2]
+        print(update)
+        if update == "falls":
+            last_falls = get_datetime(a)
+        elif update == "wakes":
+            wake = get_datetime(a)
+            hdiff = wake[3][0] - last_falls[3][0]
+            mdiff = wake[3][1] - last_falls[3][1]
+            print("\n\nIT IS\nhours: {}\nminutes: {}\n\n".format(hdiff, mdiff))
+            totaldiff = mdiff + (hdiff*60)
+            sleeps[current_guard] += totaldiff
+            for n in range(last_falls[3][1], wake[3][1]):
+                print(n)
+            for i in range(last_falls[3][1], wake[3][1]):
+                sleeptimes[current_guard][i] += 1
+        else:
+            raise Exception
+
+print(sleeps)
+
+counts = []
+for guard in sleeps:
+    a = [sleeps[guard], guard]
+    counts.append(a)
+
+counts.sort()
+print()
+print(counts[len(counts) - 1])
+
+guard_chosen = counts[len(counts) - 1][1]
+
+time_chosen = sleeptimes[guard_chosen].index(max(sleeptimes[guard_chosen]))
+
+solution = guard_chosen * time_chosen
+print(solution)
